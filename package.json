@@ -1,0 +1,16 @@
+{
+  "name" : "img_scraper",
+  "version" : "0.0.1",
+  "description" : "Searches google for n random nouns and and downloads as many images as possible. Stores metadata in database for future analysis.",
+  "main" : "scrape.js",
+  "author" : "quincy",
+  "dependencies" : {
+  	"fs"          : "latest",
+    "url"         : "latest",
+  	"path"        : "latest",
+    "request"     : "latest",
+    "cheerio"     : "latest",
+    "querystring" : "latest",
+    "mongodb"     : "latest"
+  }
+}
