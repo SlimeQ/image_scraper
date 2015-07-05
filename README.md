@@ -23,6 +23,7 @@ You may also want to change the wait time between requests to suit your local ne
 ```
 $ node scrape.js lolcat
 ```
+Output
 ```
 [ 'lolcat' ]
 googling...
@@ -44,5 +45,5 @@ http://i.huffpost.com/gen/985599/images/o-TWITTER-LOLCAT-facebook.jpg ---> SUCCE
 finished crawl!
 db closed
 ```
-If no words are given, a list of random nouns is pulled from an online generator.
+If no words are given, a list of random nouns will be pulled from an online generator.
 
