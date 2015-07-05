@@ -3,8 +3,8 @@ module.exports = exports = {
   dbURL     : 'mongodb://localhost:27017/images',
 
 	// time to wait (ms) between requests.
-	// 3 seconds seems to be reliably enough so as to not
-	// overload local network or get blocked by google.
+	// 3 seconds is safe
+	// 1 second is ok, but might be pushing it on some networks
   pause     : 1000,
 
 	// number of random words to search per execution

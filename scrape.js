@@ -34,7 +34,6 @@ function getNouns(count, callback) {
             }).map(function(x) {
               return x.data.replace(/\n$/, '');
             });
-          console.log(data);
           callback(data);
         });
       } else {
@@ -51,9 +50,6 @@ function getNouns(count, callback) {
 // do a google image search for a list of words
 // max is 64 per search
 var googleSearch = function(words, callback, pause, results, count, word, page, i) {
-  console.log('googling...');
-  console.log('words ' + JSON.stringify(words));
-
 
   if (!pause) var pause = conf.pause;
   if (!results) var results = [];
@@ -67,15 +63,14 @@ var googleSearch = function(words, callback, pause, results, count, word, page, 
   if (!page) var page = 0;
   if (!count) var count = conf.imgCount;
   if (!i) var i = 0;
-  console.log('i =', i);
+
   if (i >= count || page >= 8) {
     setTimeout(function() {
       googleSearch(words, callback, pause, results, count, null, null, 0);
     }, pause);
     return;
   }
-  console.log(word + ', page ' + page);
-  console.log(results.length);
+  console.log(word + ', page', page);
 
   var googleUrl = "https://ajax.googleapis.com/ajax/services/search/images?"
     + qs.stringify(
@@ -89,7 +84,7 @@ var googleSearch = function(words, callback, pause, results, count, word, page, 
   request(googleUrl, function (err, response, body) {
 
     if (!err) {
-      console.log('request to ' + googleUrl + ' successful');
+      console.log(googleUrl, '---> SUCCESS');
       // Parse will fail if response is not json.
       // We've probably been cut off.
       try {
@@ -126,6 +121,7 @@ var googleSearch = function(words, callback, pause, results, count, word, page, 
       }, pause);
 
     } else {
+      console.log(googleUrl, '---> ERR');
       console.log(err);
     }
   }).on('error', function(e) {
@@ -150,7 +146,6 @@ var saveAllImages = function(results, callback, pause) {
     var dir = conf.imgDir + '/' + result.searchTerm + '/';
     help.ensureExists(dir, function(err) {
       if (!err) {
-        console.log(dir + ' exists');
 
         // download image
         download(result.unescapedUrl, result.filepath, function(err, uri, fn) {
@@ -170,9 +165,8 @@ var saveAllImages = function(results, callback, pause) {
             },
             result, 
             function(err, res) {
-              if (!err) {
-                console.log('metadata saved');
-              } else {
+              if (err) {
+                console.log('ERR: no metadata was saved');
                 console.log(err);
               }
 
@@ -225,19 +219,19 @@ var download = function(uri, filename, callback){
   });
 };
 
-console.log('BEGINNING CRAWL');
 
-// get n random nouns (n is set in conf.js)
-getNouns(conf.wordCount, function(words) {
+var main = function(words) {
   console.log(words);
 
-  // google them
+  // google the things
+  console.log('googling...');
   googleSearch(words, function(results) {
-    console.log('finished googling');
+    console.log('finished googling\n');
 
     // save results to disk
     help.ensureExists(conf.imgDir, function(err) {
       if (!err) {
+        console.log('downloading images...');
         saveAllImages(results, function() {
           console.log('finished crawl!');
           db.close(function(err) {
@@ -256,4 +250,13 @@ getNouns(conf.wordCount, function(words) {
       }
     });
   });
-});
+}
+
+if (process.argv.length > 2) {
+  // use arguments if given
+  main(process.argv.slice(2));
+} else {
+  // get n random nouns (n is set in conf.js)
+  getNouns(conf.wordCount, main);
+}
+
