@@ -79,7 +79,7 @@ var googleSearch = function(words, callback, pause, results, count, word, page, 
         'q'     : word,
         'rsz'   : conf.rsz,
         'imgsz' : conf.imgsz,
-        'start' : page
+        'start' : page * conf.rsz
       });
   request(googleUrl, function (err, response, body) {
 
@@ -220,7 +220,7 @@ var download = function(uri, filename, callback){
 };
 
 
-var main = function(words) {
+var main = function(words, callback) {
   console.log(words);
 
   // google the things
@@ -240,6 +240,7 @@ var main = function(words) {
             } else {
               console.log(err);
             }
+            if (callback) callback(err);
           });
         });
       } else {
@@ -247,16 +248,28 @@ var main = function(words) {
         console.log('could not create image download directory.');
         console.log('  permissions issue?');
         console.log('  bad path name in conf.js?');
+        if (callback) callback(err);
       }
     });
   });
 }
+exports.getNouns  = getNouns;
+exports.getImages = function(words) {
+  if (!words) {
+    getNouns(conf.wordCount, main);
+  } else {
+    main(words);
+  }
+};
 
-if (process.argv.length > 2) {
-  // use arguments if given
-  main(process.argv.slice(2));
-} else {
-  // get n random nouns (n is set in conf.js)
-  getNouns(conf.wordCount, main);
+if (!module.parent) {
+  if (process.argv.length > 2) {
+    // use arguments if given
+    main(process.argv.slice(2));
+  } else {
+    // get n random nouns (n is set in conf.js)
+    getNouns(conf.wordCount, main);
+  }
 }
+
 
