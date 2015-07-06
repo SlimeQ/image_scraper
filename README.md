@@ -4,6 +4,8 @@ Gets google image search results for a list of words and downloads as many as po
 
 # Setup
 
+Install [Node.js](https://nodejs.org/download/)
+
 You should first have [MongoDB installed](http://docs.mongodb.org/manual/installation/) and the [MongoDB daemon](http://docs.mongodb.org/manual/reference/program/mongod/) running somewhere. The crawl may still run without a valid database connection, but metadata will not be saved.
 
 ```
