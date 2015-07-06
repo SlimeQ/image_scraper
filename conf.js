@@ -5,10 +5,10 @@ module.exports = exports = {
 	// time to wait (ms) between requests.
 	// 3 seconds is safe
 	// 1 second is ok, but might be pushing it on some networks
-  pause     : 1000,
+  pause     : 2000,
 
 	// number of random words to search per execution
-  wordCount : 2,
+  wordCount : 12,
 
   // results per page (max 8)
   rsz       : 8,
@@ -17,9 +17,9 @@ module.exports = exports = {
 	//   imgsz=icon restricts results to small images
 	//   imgsz=small|medium|large|xlarge restricts results to medium-sized images
 	//   imgsz=xxlarge restricts results to large images
-	//   imgsz=huge restricts resykts to extra-large images
+	//   imgsz=huge restricts results to extra-large images
   imgsz     : 'xxlarge',
 
   // number of images to download per word (max 64)
-  imgCount     : 8
+  imgCount     : 64
 };
